@@ -48,7 +48,7 @@ export default class BaseScene extends Phaser.Scene {
 
 
         const background = this.add.image(0, 0, "background").setOrigin(0, 0).setDepth(Layers.BACKGROUND).setScale(10);
-        this.player = new Player(this, 3000, 500);
+        this.player = new Player(this, 100, 600);
         this.physics.add.collider(this.player, groundLayer);
 
         // Add a collider for a specific tile index (e.g., tile index 5)
