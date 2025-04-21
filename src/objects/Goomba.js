@@ -47,8 +47,8 @@ export default class Goomba extends Phaser.Physics.Arcade.Sprite {
             (goomba, tile) => {
                 if (tile.properties.wall && goomba.name === "Goomba") {
                     console.log("Goomba collided with wall 20")
-                    this.flipX = !this.flipX; // Flip sprite horizontally
-                    this.setVelocityX(this.flipX ? -baseSpeed : baseSpeed);
+                    goomba.flipX = !goomba.flipX; // Flip sprite horizontally
+                    goomba.setVelocityX(goomba.flipX ? -baseSpeed : baseSpeed);
                 }
             },
             this
