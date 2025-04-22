@@ -3,6 +3,7 @@ const Layers = Object.freeze({
     OBJECT: 1,
     TILES: 2,
     PLAYER: 3,
+    UI: 7
 });
 
 export default Layers;

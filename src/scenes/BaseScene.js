@@ -9,8 +9,6 @@ export default class BaseScene extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image("background", "assets/background.png");
-        this.load.image("ground", "assets/ground.png");
         this.load.image("redHeart", "assets/redHeart.png");
         this.load.image("grasstiles", "assets/grasstiles.png");
         this.load.image("goomba", "assets/goomba.png");
@@ -46,8 +44,8 @@ export default class BaseScene extends Phaser.Scene {
         groundLayer.setDepth(Layers.TILES);
         this.groundLayer = groundLayer;
 
-
         const background = this.add.rectangle(0, 0, groundLayer.width, this.game.config.height, 0x4abdff).setOrigin(0, 0).setDepth(Layers.BACKGROUND).setScale(10);
+        
         this.player = new Player(this, 100, 600);
         this.physics.add.collider(this.player, groundLayer);
 
@@ -58,6 +56,7 @@ export default class BaseScene extends Phaser.Scene {
             // Change the tile's index to a different tile in the tileset
             groundLayer.putTileAt(10, tile.x, tile.y).setCollision(true); // Replace tile at (x, y) with tile index 5
 
+            // Create a coin when coin block is touched
             const coin = new Coin(this, tile.getCenterX(), tile.getCenterY());
             this.tweens.add({
                 targets: coin,
@@ -69,11 +68,12 @@ export default class BaseScene extends Phaser.Scene {
             })
         }, this);
 
+        // Complete level if player touches goal
         groundLayer.setTileIndexCallback(8, (player, tile) => {
             if (levelComplete) return;
             console.log("Player touched tile index " + tile.index);
-            let fadeout = this.add.rectangle(0, 0, groundLayer.width, 1600, 0x000000).setAlpha(0).setOrigin(0);
-            
+            let fadeout = this.add.rectangle(0, 0, groundLayer.width, 1600, 0x000000).setAlpha(0).setOrigin(0).setDepth(Layers.UI);
+
             console.log("Level Complete");
             levelComplete = true;
             this.tweens.add({
@@ -87,22 +87,23 @@ export default class BaseScene extends Phaser.Scene {
 
         });
 
+        // World and Camera setup
         this.physics.world.setBounds(0, 0, groundLayer.width, groundLayer.height);
         this.cameras.main.setBounds(0, 0, groundLayer.width, groundLayer.height);
         this.cameras.main.startFollow(this.player);
 
         // Load enemies from the "Enemies" object layer
-    const enemyObjects = map.getObjectLayer("Enemies").objects;
+        const enemyObjects = map.getObjectLayer("Enemies").objects;
+        this.goombas = this.physics.add.group();
+        enemyObjects.forEach((enemy) => {
+            if (enemy.name === "Goomba") {
+                console.log("Spawned Goomba");
+                const goomba = new Goomba(this, enemy.x, enemy.y);
+            }
+            // Add more enemy types here if needed
+        });
 
-    this.goombas = this.physics.add.group();
-    enemyObjects.forEach((enemy) => {        
-        if (enemy.name === "Goomba") {
-            console.log("Spawned Goomba");
-            const goomba = new Goomba(this, enemy.x, enemy.y);            
-        }
-        // Add more enemy types here if needed
-    });
-
+        // Keybinds
         const cursor = this.input.keyboard.createCursorKeys();
         cursor.qKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
         cursor.wKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
