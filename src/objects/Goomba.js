@@ -10,7 +10,7 @@ export default class Goomba extends Phaser.Physics.Arcade.Sprite {
         this.body.setCollideWorldBounds(true);
         this.body.onWorldBounds = true;
         this.body.setGravityY(900);
-           this.body.pushable = false;
+        this.body.pushable = false;
         const baseSpeed = 100;
         this.setVelocityX(-baseSpeed);
         this.flipX = true;
@@ -38,29 +38,45 @@ export default class Goomba extends Phaser.Physics.Arcade.Sprite {
             goomba1.setVelocityX(goomba1.flipX ? -baseSpeed : baseSpeed);
 
             goomba2.flipX = !goomba2.flipX; // Flip sprite horizontally    
-            goomba2.setVelocityX(goomba2.flipX ? -baseSpeed : baseSpeed);   
+            goomba2.setVelocityX(goomba2.flipX ? -baseSpeed : baseSpeed);
         })
 
         // Add tilemap collision callback for tiles with the "wall" property
         scene.groundLayer.setTileIndexCallback(
-            20, 
+            6,
             (goomba, tile) => {
-                if (tile.properties.wall && goomba.name === "Goomba") {
+                if (tile.properties.wall && goomba.name === "Goomba" && goomba.y > tile.y * scene.tileSize) {
                     console.log("Goomba collided with wall 20")
                     goomba.flipX = !goomba.flipX; // Flip sprite horizontally
-                    goomba.setVelocityX(goomba.flipX ? -baseSpeed : baseSpeed);
+                    goomba.body.setVelocityX(goomba.flipX ? -baseSpeed : baseSpeed);
+
+                    // Add a delay because velocity won't update properly without
+                    scene.time.addEvent({
+                        delay: 1,
+                        callback: () => {
+                            goomba.body.setVelocityX(goomba.flipX ? -baseSpeed : baseSpeed);
+                        }
+                    })
                 }
             },
             this
         );
 
         scene.groundLayer.setTileIndexCallback(
-            21, 
+            5,
             (goomba, tile) => {
-                if (tile.properties.wall && goomba.name === "Goomba") {
+                if (tile.properties.wall && goomba.name === "Goomba" && goomba.y > tile.y * scene.tileSize) {
                     console.log("Goomba collided with wall 21")
                     goomba.flipX = !goomba.flipX; // Flip sprite horizontally
                     goomba.setVelocityX(goomba.flipX ? -baseSpeed : baseSpeed);
+
+                    // Add a delay because velocity won't update properly without
+                    scene.time.addEvent({
+                        delay: 1,
+                        callback: () => {
+                            goomba.body.setVelocityX(goomba.flipX ? -baseSpeed : baseSpeed);
+                        }
+                    })
                 }
             },
             this

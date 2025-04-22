@@ -1,8 +1,4 @@
-import Layers from "../config/Layers.js";
-import Player from "../objects/Player.js";
-import Coin from "../objects/Coin.js";
-import Goomba from "../objects/Goomba.js";
-import Goal from "../objects/Goal.js";
+
 
 export default class Thx extends Phaser.Scene {
     constructor() {
@@ -11,9 +7,9 @@ export default class Thx extends Phaser.Scene {
 
     create() {
         this.add.rectangle(0, 0, this.game.config.width, this.game.config.height, 0x000000).setOrigin(0);
-        this.add.text(this.game.config.width / 2, this.game.config.height / 2, "Thanks for Playing", {fontSize: 64}).setOrigin(0.5);
+        this.add.text(this.game.config.width / 2, this.game.config.height / 2, "Thanks for Playing", {fontSize: 50}).setOrigin(0.5);
 
-        const button = this.add.rectangle(this.game.config.width / 2, this.game.config.height / 2 + 200, 300, 100, 0x888888).setOrigin(0.5).setInteractive();
+        const button = this.add.rectangle(this.game.config.width / 2, this.game.config.height / 2 + 100, 200, 50, 0x888888).setOrigin(0.5).setInteractive();
         this.add.text(button.x, button.y, "Play Again", {fontSize: 32}).setOrigin(0.5);
 
         button.on("pointerover", () => {

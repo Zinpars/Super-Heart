@@ -1,4 +1,4 @@
-import Layers from "../config/Layers.js";
+/* import Layers from "../config/Layers.js";
 
 export default class Goal extends Phaser.Physics.Arcade.Image {
     constructor(scene, x, y, player, width) {
@@ -27,4 +27,4 @@ export default class Goal extends Phaser.Physics.Arcade.Image {
     }
 
 
-}
+} */

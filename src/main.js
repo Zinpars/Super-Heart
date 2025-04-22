@@ -3,8 +3,8 @@ import Thx from './scenes/Thx.js';
 
    const config = {
     type: Phaser.AUTO,
-    width: 1280,
-    height: 720,
+    width: 640, // 20 tiles wide
+    height: 480, // 15 tiles high
     backgroundColor: "0x888888",
     render: {
         pixelArt: true,
