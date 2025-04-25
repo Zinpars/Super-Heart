@@ -12,7 +12,7 @@ export default class BaseScene extends Phaser.Scene {
         this.load.image("redHeart", "assets/redHeart.png");
         this.load.image("grasstiles", "assets/grasstiles.png");
         this.load.image("goomba", "assets/goomba.png");
-        this.load.spritesheet("coin", "assets/item_rupee_green.png", { frameWidth: 10, frameHeight: 16 });
+        this.load.spritesheet("coin", "assets/coin.png");
         this.load.tilemapTiledJSON("1-1", "assets/1-1.json");
         this.load.tilemapTiledJSON("1-2", "assets/1-2.json");
     }
