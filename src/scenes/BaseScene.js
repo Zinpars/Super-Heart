@@ -52,10 +52,11 @@ export default class BaseScene extends Phaser.Scene {
         groundLayer.setCollisionByProperty({ collides: true });
         groundLayer.setDepth(Layers.TILES);
         this.groundLayer = groundLayer;
+        this.wallTiles = [5, 6, 8, 9, 10];
 
         const background = this.add.rectangle(0, 0, groundLayer.width, this.game.config.height, 0x4abdff).setOrigin(0, 0).setDepth(Layers.BACKGROUND).setScale(10);
 
-        this.player = new Player(this, 3000, 600);
+        this.player = new Player(this, 100, 600);
         this.physics.add.collider(this.player, groundLayer);
 
 
@@ -141,47 +142,40 @@ export default class BaseScene extends Phaser.Scene {
 
     playerDied() {
         console.log("Player died!");
+        this.physics.pause();       
         this.lives -= 1;
         this.UI.livesText.setText("x " + this.lives);
         if (this.lives <= 0) {
             this.gameOver();
         } else {
-            this.scene.restart({ levelId: this.levelId, lives: this.lives });
-        }
-        
+            this.fadeout(() => this.scene.restart({ levelId: this.levelId, lives: this.lives }));
+        }        
     }
 
-    gameOver() {
-        this.physics.pause();
-        console.log("Game Over!");
-        let fadeout = this.add.rectangle(0, 0, this.groundLayer.width, 1600, 0x000000).setAlpha(0).setOrigin(0).setDepth(Layers.UI);
-        let gameOverText = this.add.text(this.game.config.width / 2, this.game.config.height / 2, "Game Over", { fontSize: "64px", color: "#ffffff" }).setOrigin(0.5).setDepth(Layers.UI).setScrollFactor(0);
-        this.tweens.add({
-            targets: fadeout,
-            duration: 3000,
-            alpha: 1,
-            onComplete: () => {
-                this.scene.restart({ levelId: 1});
-            }
-        })
-       
-    }
-
-    startNextLevel() {
-        if (this.levelComplete) return;
-
-        let fadeout = this.add.rectangle(0, 0, this.groundLayer.width, 1600, 0x000000).setAlpha(0).setOrigin(0).setDepth(Layers.UI);
-
-        console.log("Level Complete");
-        this.levelComplete = true;
+    fadeout(func) {
+        let fadeout = this.add.rectangle(0, 0, this.groundLayer.width, 1600, 0x000000).setAlpha(0).setOrigin(0).setDepth(Layers.UI).setScrollFactor(0);
         this.tweens.add({
             targets: fadeout,
             duration: 1000,
             alpha: 1,
             onComplete: () => {
-                this.scene.restart({ levelId: this.levelId + 1 });
+                func();
             }
-        })
+        }) 
+    }
+
+    gameOver() {
+        this.physics.pause();
+        console.log("Game Over!");
+        
+        let gameOverText = this.add.text(this.game.config.width / 2, this.game.config.height / 2, "Game Over", { fontSize: "64px", color: "#ffffff" }).setOrigin(0.5).setDepth(Layers.UI).setScrollFactor(0);
+        this.fadeout(() => this.scene.restart({ levelId: 1}));      
+    }
+
+    startNextLevel() {
+        if (this.levelComplete) return;
+        console.log("complete")
+        this.fadeout(() => this.scene.restart({ levelId: this.levelId + 1 }));
     }
 
     update() {

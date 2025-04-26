@@ -16,9 +16,9 @@ export default class Goomba extends Phaser.Physics.Arcade.Sprite {
         this.flipX = true;
         this.name = "Goomba"
 
-
-
         scene.physics.add.collider(this, scene.groundLayer);
+
+        // Collision with player
         scene.physics.add.collider(scene.player, this, () => {
             if (scene.player.y < this.y - this.height / 2) {
                 console.log("Player killed Goomba");
@@ -31,6 +31,7 @@ export default class Goomba extends Phaser.Physics.Arcade.Sprite {
 
         });
 
+        // Collider between Goombas
         scene.physics.add.collider(scene.goombas, scene.goombas, (goomba1, goomba2) => {
             console.log("Goombas collided");
 
@@ -42,48 +43,30 @@ export default class Goomba extends Phaser.Physics.Arcade.Sprite {
             goomba2.setVelocityX(goomba2.flipX ? -baseSpeed : baseSpeed);
         })
 
-        // Add tilemap collision callback for tiles with the "wall" property
-        scene.groundLayer.setTileIndexCallback(
-            6,
-            (goomba, tile) => {
-                if (goomba.name === "Goomba" && goomba.y > tile.y * scene.tileSize) {
-                    console.log("Goomba collided with wall 20")
-                    goomba.flipX = !goomba.flipX; // Flip sprite horizontally
-                    goomba.body.setVelocityX(goomba.flipX ? -baseSpeed : baseSpeed);
+        // Add tilemap collision callback for tiles in the wallTiles array
+        for (let i = 0; i < scene.wallTiles.length; i++) {
+            scene.groundLayer.setTileIndexCallback(
+                scene.wallTiles[i],
+                (goomba, tile) => {
+                    if (goomba.name === "Goomba" && goomba.y > tile.y * scene.tileSize) {
+                        console.log("Goomba collided with wall tile " + tile.index);
+                        goomba.flipX = !goomba.flipX; // Flip sprite horizontally
+                        goomba.body.setVelocityX(goomba.flipX ? -baseSpeed : baseSpeed);
+    
+                        // Add a delay because velocity won't update properly without
+                        scene.time.addEvent({
+                            delay: 1,
+                            callback: () => {
+                                goomba.body.setVelocityX(goomba.flipX ? -baseSpeed : baseSpeed);
+                            }
+                        })
+                    }
+                },
+                this
+            );
+        }
 
-                    // Add a delay because velocity won't update properly without
-                    scene.time.addEvent({
-                        delay: 1,
-                        callback: () => {
-                            goomba.body.setVelocityX(goomba.flipX ? -baseSpeed : baseSpeed);
-                        }
-                    })
-                }
-            },
-            this
-        );
-
-        scene.groundLayer.setTileIndexCallback(
-            5,
-            (goomba, tile) => {
-                if (goomba.name === "Goomba" && goomba.y > tile.y * scene.tileSize) {
-                    console.log("Goomba collided with wall 21")
-                    goomba.flipX = !goomba.flipX; // Flip sprite horizontally
-                    goomba.setVelocityX(goomba.flipX ? -baseSpeed : baseSpeed);
-
-                    // Add a delay because velocity won't update properly without
-                    scene.time.addEvent({
-                        delay: 1,
-                        callback: () => {
-                            goomba.body.setVelocityX(goomba.flipX ? -baseSpeed : baseSpeed);
-                        }
-                    })
-                }
-            },
-            this
-        );
-
-
+        // Goomba falls off the map
         scene.physics.world.on("worldbounds", (body) => {
             if (body.gameObject === this && this.y >= scene.game.config.height - this.height) {
                 console.log("Goomba fell");

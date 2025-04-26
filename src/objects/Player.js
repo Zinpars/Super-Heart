@@ -18,7 +18,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         this.spawnY = y || 500;
 
         scene.physics.world.on("worldbounds", (body) => {
-            if (body.gameObject === this && this.y >= scene.game.config.height - this.height) {
+            if (body.gameObject === this && this.y >= scene.groundLayer.height - this.height) {
                 console.log("Player fell");
                 scene.playerDied();
             }
