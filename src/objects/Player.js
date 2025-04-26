@@ -20,8 +20,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         scene.physics.world.on("worldbounds", (body) => {
             if (body.gameObject === this && this.y >= scene.game.config.height - this.height) {
                 console.log("Player fell");
-                this.body.setVelocity(0, 0); 
-                this.setPosition(this.spawnX, this.spawnY);
+                scene.playerDied();
             }
         });        
     }
@@ -41,8 +40,10 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
             this.setVelocityX(-speed);
             this.flipX = true;
         }
+
+        // Jump logic
         if (cursor.space.isDown && this.body.onFloor() && this.body.velocity.y > -700) {
-            this.body.velocity.y -= 300;
+            this.body.velocity.y = -300;
             scene.time.addEvent({
                 delay: 50,
                 callback: () => {

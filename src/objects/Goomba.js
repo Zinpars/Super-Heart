@@ -22,10 +22,11 @@ export default class Goomba extends Phaser.Physics.Arcade.Sprite {
         scene.physics.add.collider(scene.player, this, () => {
             if (scene.player.y < this.y - this.height / 2) {
                 console.log("Player killed Goomba");
+                scene.player.body.setVelocityY(-300);
                 this.destroy();
             } else {
                 console.log("Player got hit by a Goomba!");
-                scene.scene.restart();
+                scene.playerDied();
             }
 
         });
