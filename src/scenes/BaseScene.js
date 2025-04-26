@@ -55,7 +55,7 @@ export default class BaseScene extends Phaser.Scene {
 
         const background = this.add.rectangle(0, 0, groundLayer.width, this.game.config.height, 0x4abdff).setOrigin(0, 0).setDepth(Layers.BACKGROUND).setScale(10);
 
-        this.player = new Player(this, 100, 600);
+        this.player = new Player(this, 3000, 600);
         this.physics.add.collider(this.player, groundLayer);
 
 

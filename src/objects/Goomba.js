@@ -46,7 +46,7 @@ export default class Goomba extends Phaser.Physics.Arcade.Sprite {
         scene.groundLayer.setTileIndexCallback(
             6,
             (goomba, tile) => {
-                if (tile.properties.wall && goomba.name === "Goomba" && goomba.y > tile.y * scene.tileSize) {
+                if (goomba.name === "Goomba" && goomba.y > tile.y * scene.tileSize) {
                     console.log("Goomba collided with wall 20")
                     goomba.flipX = !goomba.flipX; // Flip sprite horizontally
                     goomba.body.setVelocityX(goomba.flipX ? -baseSpeed : baseSpeed);
@@ -66,7 +66,7 @@ export default class Goomba extends Phaser.Physics.Arcade.Sprite {
         scene.groundLayer.setTileIndexCallback(
             5,
             (goomba, tile) => {
-                if (tile.properties.wall && goomba.name === "Goomba" && goomba.y > tile.y * scene.tileSize) {
+                if (goomba.name === "Goomba" && goomba.y > tile.y * scene.tileSize) {
                     console.log("Goomba collided with wall 21")
                     goomba.flipX = !goomba.flipX; // Flip sprite horizontally
                     goomba.setVelocityX(goomba.flipX ? -baseSpeed : baseSpeed);
