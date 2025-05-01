@@ -52,7 +52,7 @@ export default class BaseScene extends Phaser.Scene {
         groundLayer.setCollisionByProperty({ collides: true });
         groundLayer.setDepth(Layers.TILES);
         this.groundLayer = groundLayer;
-        this.wallTiles = [5, 6, 8, 9, 10];
+        this.wallTiles = [5, 6, 8, 9, 10]; // TODO: pull wallTiles from a tiled property
 
         const background = this.add.rectangle(0, 0, groundLayer.width, this.game.config.height, 0x4abdff).setOrigin(0, 0).setDepth(Layers.BACKGROUND).setScale(10);
 
